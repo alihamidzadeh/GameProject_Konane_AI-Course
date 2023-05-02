@@ -1,5 +1,6 @@
 import tkinter as tk
 
+
 class Graphic(tk.Tk):
 
     def __init__(self, init_board, *args, **kwargs):
@@ -9,7 +10,7 @@ class Graphic(tk.Tk):
 
         # Save metadata
         self.title("Konane | Bash Games")
-        #self.wm_iconbitmap("deep_red.ico")
+        # self.wm_iconbitmap("deep_red.ico")
         self.wm_iconbitmap("Doc/BashGames.ico")
         self.resizable(False, False)
         self.configure(bg="#fff")
@@ -20,35 +21,31 @@ class Graphic(tk.Tk):
         self.b_size = len(init_board)
 
         self.init_click_handler()
-        
+
         # Create column/row labels
         label_font = "Helvetica 16"
         label_bg = "#fff"
         label_fg = "#333"
         for i in range(self.b_size):
-
-            row_label1 = tk.Label(self, text=i , font=label_font,
-                bg=label_bg, fg=label_fg)
+            row_label1 = tk.Label(self, text=i, font=label_font,
+                                  bg=label_bg, fg=label_fg)
             row_label1.grid(row=i + 1, column=0)
 
-
-            col_label1 = tk.Label(self, text=i , font=label_font,
-                bg=label_bg, fg=label_fg)
+            col_label1 = tk.Label(self, text=i, font=label_font,
+                                  bg=label_bg, fg=label_fg)
             col_label1.grid(row=0, column=i + 1)
-
-   
 
         # Create grid canvas
         self.canvas = tk.Canvas(self, width=550, height=550, bg="#fff",
-            highlightthickness=0)
+                                highlightthickness=0)
         self.canvas.grid(row=1, column=1,
-            columnspan=self.b_size, rowspan=self.b_size)
+                         columnspan=self.b_size, rowspan=self.b_size)
 
         # Create status label
         self.status = tk.Label(self, anchor="c", font=(None, 16),
-            bg="#212121", fg="#fff", text="White player's turn")
+                               bg="#212121", fg="#fff", text="White player's turn")
         self.status.grid(row=self.b_size + 3, column=0,
-            columnspan=self.b_size + 3, sticky="ewns")
+                         columnspan=self.b_size + 3, sticky="ewns")
 
         # Bind the drawing function and configure grid sizes
         self.canvas.bind("<Configure>", self.draw_tiles)
@@ -78,7 +75,7 @@ class Graphic(tk.Tk):
             self.board = board
         else:
             print("board is not set")
-            
+
         # Delete old rectangles and save properties
         self.canvas.delete("tile")
         cell_width = int(self.canvas.winfo_width() / self.b_size)
@@ -100,12 +97,12 @@ class Graphic(tk.Tk):
 
                 # Render tile
                 tile = self.canvas.create_rectangle(x1, y1, x2, y2,
-                    tags="tile", width=border_size, fill=tile_color,
-                    outline=outline_color)
+                                                    tags="tile", width=border_size, fill=tile_color,
+                                                    outline=outline_color)
                 self.tiles[row, col] = tile
                 if self.click_handler:
                     self.canvas.tag_bind(tile, "<1>", lambda event, row=row,
-                        col=col: self.click_handler(row, col))
+                                                             col=col: self.click_handler(row, col))
 
         self.draw_pieces()
 
@@ -130,16 +127,15 @@ class Graphic(tk.Tk):
 
                 if self.board[row][col].piece == 2:
                     piece = self.canvas.create_oval(x1, y1, x2, y2,
-                        tags="piece", width=0, fill="#302424")
+                                                    tags="piece", width=0, fill="#302424")
                 elif self.board[row][col].piece == 1:
                     piece = self.canvas.create_oval(x1, y1, x2, y2,
-                        tags="piece", width=0, fill="#ded5d5")
+                                                    tags="piece", width=0, fill="#ded5d5")
                 else:
                     continue
-                
 
                 if self.click_handler:
                     self.canvas.tag_bind(piece, "<1>", lambda event, row=row,
-                        col=col: self.click_handler(row, col))
+                                                              col=col: self.click_handler(row, col))
 
         self.update()

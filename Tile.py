@@ -8,15 +8,14 @@ class Tile():
     O_NONE = 0
     O_SELECT = 1
     O_MOVED = 2
-    
-    def __init__(self, piece= 0, outline=0, row=0, col=0):
+
+    def __init__(self, piece=0, outline=0, row=0, col=0):
         self.outline = outline
         self.piece = piece
         self.row = row
         self.col = col
 
     def get_tile_colors(self):
-
         # Find appropriate tile color
         tile_colors = [
             ("#8C6C50", "#DBBFA0")

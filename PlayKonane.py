@@ -1,4 +1,6 @@
 import random
+import time
+
 from GUInterface import Graphic
 from Tile import Tile
 
@@ -35,7 +37,7 @@ class PlayKonane:
         self.board_view.mainloop()
 
     def run_bot_vs_bot(self):
-
+        time.sleep(0.2)  # TODO set stop time for move (Bot vs Bot)
         self.execute_computer_move(self.agent1)
         if not self.game_finished:
             self.execute_computer_move(self.agent2)

@@ -1,7 +1,7 @@
 from Tile import Tile
 
 
-class KonaneGame:
+class KonaneGame2:
     def __init__(self):
         NotImplemented
 
@@ -122,12 +122,40 @@ class KonaneGame:
     def evaluate(self, board, color, terminal_value=0):
 
         value = 0
-        valid_moves_color = self.generate_all_possible_moves(board, color)
-        valid_moves_opponent = self.generate_all_possible_moves(board, self.opponent(color))
 
-        value += (10 * len(valid_moves_color))
-        value -= (10 * len(valid_moves_opponent))
+        # Piece count: The more pieces a player has on the board, the better their position is.
+        value += 100 * (board.count_symbol(color) - board.count_symbol(self.opponent(color)))
+
+        # Mobility: A player with more options to move their pieces
+        value += 30 * (len(self.generate_all_possible_moves(board, color)) - len(self.generate_all_possible_moves(board,
+                                                                                                                  self.opponent(
+                                                                                                                      color))))
+        # Central control: Controlling the center of the board gives a player more options and
+        #  makes it harder for their opponent to maneuver around them.
+        center = []
+        center.append(board.game_board[(board.size - 1) // 2][(board.size - 1) // 2].piece)
+        center.append(board.game_board[(board.size - 1) // 2][((board.size - 1) // 2) + 1].piece)
+        center.append(board.game_board[((board.size - 1) // 2) + 1][(board.size - 1) // 2].piece)
+        center.append(board.game_board[((board.size - 1) // 2) + 1][((board.size - 1) // 2) + 1].piece)
+        value += 50 * (center.count(color) - center.count(self.opponent(color)))
+
+        # Corner control: whatever player's pieces are at the corner is better
+        corner = []
+        corner.append(board.game_board[0][0].piece)
+        corner.append(board.game_board[0][board.size - 1].piece)
+        corner.append(board.game_board[board.size - 1][0].piece)
+        corner.append(board.game_board[board.size - 1][board.size - 1].piece)
+        value += 20 * (corner.count(color) - corner.count(self.opponent(color)))
+
+        # Edge control: whatever player's pieces are at the edges is better
+        edge = []
+        for i in range(1, board.size - 1):
+            edge.append(board.game_board[i][0].piece)
+            edge.append(board.game_board[i][board.size - 1].piece)
+            edge.append(board.game_board[0][i].piece)
+            edge.append(board.game_board[board.size - 1][i].piece)
+
+        value += 30 * (edge.count(color) - edge.count(self.opponent(color)))
 
         value += terminal_value
-
         return value
